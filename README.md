@@ -1,6 +1,6 @@
-# RegistFormer
+# Registration by Generation
+![Framwork](https://github.com/user-attachments/assets/3459a3e6-9db6-4a2c-9469-a1aef20e0669)
 
-## This code is being refactored and developed.
 
 ## 1. Description
 
@@ -9,41 +9,20 @@
 - `Pytorch-lighting` + `Hydra` + `Tensorboard` was used for experiment-tracking
 
 
-## 2. Installation
-
-```bash
-Will be uploaded soon
-```
-
-## 3. Dataset
+## 2. Dataset
 #### Dataset 
 Grand challenge ['SynthRAD 2023'](https://synthrad2023.grand-challenge.org/) Pelvis MR, CT
 
 #### Preprocessing
-- MR: 
-  - N4 correction 
-  - Nyul Histogram Matching 
-  - z-score norm each patient 
-  - -1~1 minmax norm each patient
-
-- CT: 
+- CT & CBCT: 
   - 5%, 95% percentile clip 
   - z-score norm whole patient 
   - -1 ~ 1 minmax norm whole patient
 
+Two sets are provided in the data folder, one for registering CT to CBCT images and one for registering CT to SynCT (generated from CBCT) iamges.
+
 #### File Format: 
-h5
-
-#### Dataset download
-https://drive.google.com/drive/folders/19a9VF9TYMyg6TAnOyRokn4d46_Nfhvfa?usp=sharing
-
-Download this preprocessed MR to CT dataset, and insert it into the 'data/SynthRAD_MR_CT_Pelvis' folder.
-
-
-#### Pretrained model download
-https://drive.google.com/drive/folders/1dR1kGKsZQCLMtXnNqJ8Arm5aFl2IslrX?usp=sharing
-
-Download this pretrained model, and insert it into the 'pretrained' folder.
+h5 formate is used to store and load the data.
 
 
 ## 4. How to run
@@ -52,3 +31,4 @@ Download this pretrained model, and insert it into the 'pretrained' folder.
 #### Training
 python registformer/train.py model='registformer.yaml' trainer.devices=[0] tags='SynthRAD_Registformer_try'
 ```
+Tags can be edited accordingly to switch for example between the different attention types. (MEA (Memory efficient attention) or Softmax)
