@@ -1,0 +1,58 @@
+_target_: src.models.voxelmorph_original_module.VoxelmorphOriginalModule
+
+name: Voxelmorph_Original_Registration
+
+optimizer:
+  _target_: torch.optim.Adam
+  _partial_: true
+  lr: 0.0002
+  betas: [0.9, 0.99]
+  weight_decay: 0
+
+scheduler:
+  _target_: torch.optim.lr_scheduler.MultiStepLR
+  _partial_: true
+  milestones: [250000, 300000]
+  gamma: 0.5
+
+netR_A:
+  _target_: src.models.components.networks_define.define_R
+  netR_type: voxelmorph_original
+  inshape: [192, 192]  ## change size
+  #176, 176, 176
+  #160, 176, 192
+  nb_unet_features: [[16, 32, 32, 32], [32, 32, 32, 32, 32, 16, 16]]
+  nb_unet_levels: null
+  unet_feat_mult: 1
+  nb_unet_conv_per_level: 1
+  int_steps: 7
+  int_downsize: 2
+  bidir: False
+  use_probs: False
+  src_feats: 1
+  trg_feats: 1
+  unet_half_res: False
+#  init_type: 'normal'
+#  init_gain: 0.02
+#  feat_dim: 14
+#  ref_ch: 1
+#  src_ch: 1
+#  out_ch: 1
+#  nhead: 2
+#  mlp_ratio: 2
+#  pos_en_flag: false
+#  k_size: 28
+#  attn_type: 'softmax'
+#  daca_loc: null
+#  fuse_type: null
+
+
+params: # Other params
+  lambda_l2: 1
+  lambda_grad: 0
+  lambda_mask_l2: 0
+  lambda_smooth: 0.5
+  reverse: ${data.reverse} # A->B if False, B->A if True
+  use_split_inference: ${data.use_split_inference}
+  is_3d: ${data.is_3d}
+  flag_train_fixed_moving: False # Swap moving and fixed only during training to encourage learning without compromising reference features. (My guess, experimenting)

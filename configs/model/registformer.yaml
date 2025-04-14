@@ -1,0 +1,81 @@
+_target_: src.models.registformer_module.RegistFormerModule
+
+name: RegistFormer
+
+optimizer:
+  _target_: torch.optim.Adam
+  _partial_: true
+  lr: 0.0002
+  betas: [0.9, 0.99]
+  weight_decay: 0
+
+scheduler:
+  _target_: torch.optim.lr_scheduler.MultiStepLR
+  _partial_: true
+  milestones: [250000, 300000]
+  gamma: 0.50
+
+netG_A:
+  _target_: src.models.components.networks_define.define_G
+  netG_type: registformer
+  feat_dim: 14  #16 #32 #64
+  ref_ch: 1
+  src_ch: 1
+  out_ch: 1
+  nhead: 2 #8
+  mlp_ratio: 2
+  pos_en_flag: false
+  k_size: 28
+  attn_type: 'softmax'
+  daca_loc: null
+#  flow_type: 'voxelmorph' # 'voxelmorph' 'zero'-> Ablation
+  flow_type: 'grad_icon'
+  dam_type: 'no_dam'
+  fuse_type: null
+#  flow_model_path: 'pretrained/registration/Voxelmorph_Loss_MSE_MaskMSE1_0075.pt'
+  flow_model_path: 'pretrained/registration/gradicon_epoch64.ckpt'
+  flow_ft: false
+  dam_ft: false
+  dam_path: 'pretrained/synthesis/meta_synthesis_epoch_089.ckpt'
+  dam_feat: 64
+  main_ft: true
+  init_type: 'normal'
+  init_gain: 0.02
+  is_moved_feat: false
+
+netD_A:
+  _target_: src.models.components.networks_define.define_D
+  input_nc: 1
+  ndf: 64
+  # norm: 'instance'
+  # n_layers_D: 3
+  init_type: 'normal'
+
+netF_A: # For PatchNCELoss
+  _target_: src.models.components.networks_define.define_F
+  netF_type: 'mlp_sample'
+  use_mlp: True #True
+  init_type: 'xavier' #'xavier'
+  init_gain: 0.02
+  nc: 256
+  input_nc: ${model.netG_A.feat_dim}
+
+params: # Other params
+  lambda_ctx: 1 #1
+  lambda_gan: 0.1  #0 # 0.1 # 1
+  lambda_mind: 1 #2
+  lambda_nce: 0
+  lambda_l1: 0
+#  lambda_mse: 1
+#  lambda_smooth: 0.8
+#  lambda_nmi: 0
+  reverse: ${data.reverse} # A->B if False, B->A if True
+  use_split_inference: ${data.use_split_inference}
+  flip_equivariance: False
+  batch_size: ${data.batch_size}
+  nce_on_vgg: False
+
+  #Ablation
+  ran_shift: 10 #null # "Put null or Interger" / random shift to ground truth when calculating Contextual Loss
+  flag_occlusionCTX: False # Occlusion masked contextual loss
+  flow_model_path: ${model.netG_A.flow_model_path}
