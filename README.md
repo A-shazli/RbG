@@ -29,6 +29,6 @@ h5 formate is used to store and load the data.
 
 ```bash
 #### Training
-python registformer/train.py model='registformer.yaml' trainer.devices=[0] tags='SynthRAD_Registformer_try'
+python train.py tags='SynthRAD_RbG'
 ```
 Tags can be edited accordingly to switch for example between the different attention types. (MEA (Memory efficient attention) or Softmax)
