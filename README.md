@@ -11,12 +11,12 @@
 
 ## 2. Dataset
 #### Dataset 
-Grand challenge ['SynthRAD 2023'](https://synthrad2023.grand-challenge.org/) Pelvis MR, CT
+Grand challenge ['SynthRAD 2023'](https://synthrad2023.grand-challenge.org/) Brain CBCT, CT
 
 #### Preprocessing
 - CT & CBCT: 
-  - 5%, 95% percentile clip 
-  - z-score norm whole patient 
+  - Non-local means denoising 
+  - Histogram Equalization 
   - -1 ~ 1 minmax norm whole patient
 
 Two sets are provided in the data folder, one for registering CT to CBCT images and one for registering CT to SynCT (generated from CBCT) iamges.
