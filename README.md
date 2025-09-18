@@ -1,5 +1,6 @@
 # Registration by Generation
-![Framwork](https://github.com/user-attachments/assets/3459a3e6-9db6-4a2c-9469-a1aef20e0669)
+<img width="5171" height="3797" alt="Graphical abstract" src="https://github.com/user-attachments/assets/b7ac5e47-444b-4649-8b69-9e62423bbc44" />
+
 
 
 ## 1. Description
